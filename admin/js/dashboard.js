@@ -882,42 +882,57 @@
      组件：动态行列表
      ========================================================= */
   function buildDynList(container, items, cellTpl, singleKey) {
-    const el = typeof container === "string" ? $(container) : container;
+    var el = typeof container === "string" ? $(container) : container;
+    if (!el) return;
     el._tpl = cellTpl;
     el._singleKey = singleKey;
-    el._items = items.slice();
+    el._items = (items || []).slice();
     drawDynList(el);
   }
   function drawDynList(el) {
+    if (!el) return;
     el.innerHTML = "";
-    el._items.forEach((it, idx) => {
-      const row = document.createElement("div");
+    var items = el._items || [];
+    var tpl = el._tpl;
+    for (var i = 0; i < items.length; i++) {
+      var row = document.createElement("div");
       row.className = "dyn-row";
-      row.innerHTML = el._tpl(it).join("") +
-        `<button class="dyn-remove" type="button" aria-label="删除"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M6 18L18 6" stroke-linecap="round"/></svg></button>`;
-      row.querySelector(".dyn-remove").addEventListener("click", () => { el._items.splice(idx, 1); drawDynList(el); });
+      var innerParts = tpl(items[i]).join("");
+      row.innerHTML = innerParts +
+        '<button class="dyn-remove" type="button" aria-label="删除"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M6 18L18 6" stroke-linecap="round"/></svg></button>';
+      (function(idx) {
+        row.querySelector(".dyn-remove").addEventListener("click", function() {
+          el._items.splice(idx, 1);
+          drawDynList(el);
+        });
+      })(i);
       el.appendChild(row);
-    });
+    }
   }
   function addDynRow(container, tpl, newItem, singleKey) {
-    const el = typeof container === "string" ? $(container) : container;
-    if (!el._items) { el._items = []; el._tpl = tpl; el._singleKey = singleKey; }
+    var el = typeof container === "string" ? $(container) : container;
+    if (!el) return;
+    if (!el._items) { el._items = []; }
+    if (!el._tpl) { el._tpl = tpl; }
     el._items.push(newItem);
     drawDynList(el);
   }
   function readDynList(container) {
-    const el = typeof container === "string" ? $(container) : container;
-    const rows = $$(".dyn-row", el);
-    return rows.map((r) => {
-      const inputs = $$("input, textarea, select", r);
-      if (el._singleKey && inputs.length === 1) {
-        return { text: val(inputs[0]) };
+    var el = typeof container === "string" ? $(container) : container;
+    if (!el) return [];
+    var rows = $$(".dyn-row", el);
+    var out = [];
+    for (var i = 0; i < rows.length; i++) {
+      var inputs = $$("input, textarea, select", rows[i]);
+      var obj = {};
+      for (var j = 0; j < inputs.length; j++) {
+        var k = inputs[j].getAttribute("data-k");
+        if (k) obj[k] = val(inputs[j]);
       }
-      const obj = {};
-      inputs.forEach((inp) => { const k = inp.getAttribute("data-k"); if (k) obj[k] = val(inp); });
       if ("level" in obj) obj.level = Number(obj.level) || 0;
-      return obj;
-    });
+      out.push(obj);
+    }
+    return out;
   }
 
   /* =========================================================
