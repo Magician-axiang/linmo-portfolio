@@ -883,15 +883,13 @@
      ========================================================= */
   function buildDynList(container, items, cellTpl, singleKey) {
     const el = typeof container === "string" ? $(container) : container;
-    if (!el) return;
     el._tpl = cellTpl;
     el._singleKey = singleKey;
-    el._items = Array.isArray(items) ? items.slice() : [];
+    el._items = items.slice();
     drawDynList(el);
   }
   function drawDynList(el) {
     el.innerHTML = "";
-    if (!el._items) return;
     el._items.forEach((it, idx) => {
       const row = document.createElement("div");
       row.className = "dyn-row";
@@ -903,14 +901,12 @@
   }
   function addDynRow(container, tpl, newItem, singleKey) {
     const el = typeof container === "string" ? $(container) : container;
-    if (!el) return;
     if (!el._items) { el._items = []; el._tpl = tpl; el._singleKey = singleKey; }
     el._items.push(newItem);
     drawDynList(el);
   }
   function readDynList(container) {
     const el = typeof container === "string" ? $(container) : container;
-    if (!el) return [];
     const rows = $$(".dyn-row", el);
     return rows.map((r) => {
       const inputs = $$("input, textarea, select", r);
