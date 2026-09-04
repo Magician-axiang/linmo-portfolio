@@ -18,6 +18,10 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const PORT = process.env.PORT || 3000;
 const isProd = process.env.NODE_ENV === "production";
 
+/* 信任反向代理（Render/Cloudflare 都需要），
+   否则 express-session 的 secure cookie 不会下发 */
+app.set("trust proxy", 1);
+
 /* ---------- 中间件 ---------- */
 app.use(express.json({ limit: "8mb" })); // base64 缩略图可能较大
 app.use(express.urlencoded({ extended: true, limit: "8mb" }));
