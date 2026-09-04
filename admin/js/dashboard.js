@@ -687,7 +687,11 @@
      6. 联系方式
      ========================================================= */
   function renderContact() {
+    try {
     const c = state.contact || {};
+    const socialsData = (c.socials && Array.isArray(c.socials) && c.socials.length)
+      ? c.socials
+      : [{ name: "", url: "" }];
     $("#contentArea").innerHTML = `
       <div class="page-head">
         <span class="page-eyebrow">内容</span>
@@ -702,19 +706,33 @@
         </div>
         <div class="card-head" style="margin-top:1.5rem"><div><div class="card-h">社交链接</div><div class="card-sub">名称会自动匹配图标：YouTube / Bilibili / Instagram / Email</div></div></div>
         <div id="c_socials" class="dyn-list"></div>
-        <button class="dyn-add" id="c_addSocial"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg> 社交链接</button>
-        <div class="action-bar"><span class="saved" id="c_saved"></span><button class="btn btn-primary" id="c_save">保存联系方式</button></div>
+        <button type="button" class="dyn-add" id="c_addSocial"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg> 添加社交链接</button>
+        <div class="action-bar"><span class="saved" id="c_saved"></span><button type="button" class="btn btn-primary" id="c_save">保存联系方式</button></div>
       </div>`;
 
-    buildDynList("c_socials", (c.socials && c.socials.length) ? c.socials : [{ name: "", url: "" }], (it) => [
-      `<input class="input" data-k="name" placeholder="YouTube" value="${esc(it.name)}" />`,
-      `<input class="input" data-k="url" placeholder="https://" value="${esc(it.url)}" />`,
-    ]);
-    $("#c_addSocial").addEventListener("click", () => addDynRow("c_socials", () => [
-      `<input class="input" data-k="name" placeholder="YouTube" />`,
-      `<input class="input" data-k="url" placeholder="https://" />`,
-    ], { name: "", url: "" }));
+    // buildDynList 可能因数据异常而抛错，用 try-catch 包裹确保后续监听器仍能注册
+    try {
+      buildDynList("c_socials", socialsData, (it) => [
+        `<input class="input" data-k="name" placeholder="YouTube" value="${esc(it.name)}" />`,
+        `<input class="input" data-k="url" placeholder="https://" value="${esc(it.url)}" />`,
+      ]);
+    } catch (e) {
+      console.error("[contact] buildDynList 失败:", e);
+    }
+
+    $("#c_addSocial").addEventListener("click", () => {
+      try {
+        addDynRow("c_socials", () => [
+          `<input class="input" data-k="name" placeholder="YouTube" />`,
+          `<input class="input" data-k="url" placeholder="https://" />`,
+        ], { name: "", url: "" });
+      } catch (e) { console.error("[contact] addDynRow 失败:", e); toast("添加失败: " + e.message, "err"); }
+    });
     $("#c_save").addEventListener("click", saveContact);
+    } catch (outer) {
+      console.error("[contact] renderContact 整体异常:", outer);
+      $("#contentArea").innerHTML = `<div class="card"><p style="color:var(--danger)">渲染出错：${esc(outer.message)}</p></div>`;
+    }
   }
 
   async function saveContact() {
@@ -865,30 +883,41 @@
      ========================================================= */
   function buildDynList(container, items, cellTpl, singleKey) {
     const el = typeof container === "string" ? $(container) : container;
+    if (!el) { console.warn("buildDynList: container not found", container); return; }
+    if (!Array.isArray(items) || !items.length) items = [];
     el._tpl = cellTpl;
     el._singleKey = singleKey;
-    el._items = items.slice();
+    el._items = items.map(it => ({...it})); // 浅拷贝，避免原数据被修改
     drawDynList(el);
   }
   function drawDynList(el) {
+    if (!el || !el._tpl) return;
     el.innerHTML = "";
-    el._items.forEach((it, idx) => {
+    (el._items || []).forEach((it, idx) => {
       const row = document.createElement("div");
       row.className = "dyn-row";
-      row.innerHTML = el._tpl(it).join("") +
-        `<button class="dyn-remove" type="button" aria-label="删除"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M6 18L18 6" stroke-linecap="round"/></svg></button>`;
-      row.querySelector(".dyn-remove").addEventListener("click", () => { el._items.splice(idx, 1); drawDynList(el); });
+      try {
+        row.innerHTML = el._tpl(it).join("") +
+          `<button class="dyn-remove" type="button" aria-label="删除"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M6 18L18 6" stroke-linecap="round"/></svg></button>`;
+        row.querySelector(".dyn-remove").addEventListener("click", () => { el._items.splice(idx, 1); drawDynList(el); });
+      } catch (e) {
+        row.innerHTML = `<span style="color:var(--danger)">渲染行出错：${esc(e.message)}</span>`;
+      }
       el.appendChild(row);
     });
   }
   function addDynRow(container, tpl, newItem, singleKey) {
     const el = typeof container === "string" ? $(container) : container;
-    if (!el._items) { el._items = []; el._tpl = tpl; el._singleKey = singleKey; }
+    if (!el) { console.warn("addDynRow: container not found", container); return; }
+    if (!el._items) { el._items = []; }
+    if (!el._tpl) el._tpl = tpl;
+    if (singleKey !== undefined) el._singleKey = singleKey;
     el._items.push(newItem);
     drawDynList(el);
   }
   function readDynList(container) {
     const el = typeof container === "string" ? $(container) : container;
+    if (!el) return [];
     const rows = $$(".dyn-row", el);
     return rows.map((r) => {
       const inputs = $$("input, textarea, select", r);
