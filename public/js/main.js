@@ -10,7 +10,6 @@ window.Main = (function () {
     initNavbar();
     initMobileMenu();
     initReveal();
-    initToTop();
     initVideoModal();
     initContactForm();
     initSmoothAnchor();
