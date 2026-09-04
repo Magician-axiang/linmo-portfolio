@@ -12,6 +12,14 @@
   /* ---------- 工具 ---------- */
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+  // 容器解析：如果是纯 ID 字符串（不带 # . [），自动补 #
+  const $el = (c) => {
+    if (typeof c === "string") {
+      if (!/^[#.\[>]/.test(c)) c = "#" + c;
+      return $(c);
+    }
+    return c;
+  };
   const esc = (s) =>
     String(s == null ? "" : s)
       .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
@@ -841,8 +849,9 @@
      组件：标签 chip 输入
      ========================================================= */
   function buildChips(container, arr) {
-    const el = typeof container === "string" ? $(container) : container;
-    el._chips = arr.slice();
+    const el = $el(container);
+    if (!el) return;
+    el._chips = (arr || []).slice();
     drawChips(el);
     if (!el._bound) {
       const input = document.createElement("input");
@@ -874,7 +883,8 @@
     });
   }
   function readChips(container) {
-    const el = typeof container === "string" ? $(container) : container;
+    const el = $el(container);
+    if (!el) return [];
     return el._chips ? el._chips.slice() : [];
   }
 
@@ -882,7 +892,7 @@
      组件：动态行列表
      ========================================================= */
   function buildDynList(container, items, cellTpl, singleKey) {
-    var el = typeof container === "string" ? $(container) : container;
+    var el = $el(container);
     if (!el) return;
     el._tpl = cellTpl;
     el._singleKey = singleKey;
@@ -910,7 +920,7 @@
     }
   }
   function addDynRow(container, tpl, newItem, singleKey) {
-    var el = typeof container === "string" ? $(container) : container;
+    var el = $el(container);
     if (!el) return;
     if (!el._items) { el._items = []; }
     if (!el._tpl) { el._tpl = tpl; }
@@ -918,7 +928,7 @@
     drawDynList(el);
   }
   function readDynList(container) {
-    var el = typeof container === "string" ? $(container) : container;
+    var el = $el(container);
     if (!el) return [];
     var rows = $$(".dyn-row", el);
     var out = [];
