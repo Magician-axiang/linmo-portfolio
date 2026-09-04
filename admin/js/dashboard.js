@@ -883,35 +883,28 @@
      ========================================================= */
   function buildDynList(container, items, cellTpl, singleKey) {
     const el = typeof container === "string" ? $(container) : container;
-    if (!el) { console.warn("buildDynList: container not found", container); return; }
-    if (!Array.isArray(items)) items = [];
+    if (!el) return;
     el._tpl = cellTpl;
     el._singleKey = singleKey;
-    el._items = items.slice(); // 浅拷贝数组，保持原元素引用
+    el._items = Array.isArray(items) ? items.slice() : [];
     drawDynList(el);
   }
   function drawDynList(el) {
-    if (!el || !el._tpl) return;
     el.innerHTML = "";
-    (el._items || []).forEach((it, idx) => {
+    if (!el._items) return;
+    el._items.forEach((it, idx) => {
       const row = document.createElement("div");
       row.className = "dyn-row";
-      try {
-        row.innerHTML = el._tpl(it).join("") +
-          `<button class="dyn-remove" type="button" aria-label="删除"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M6 18L18 6" stroke-linecap="round"/></svg></button>`;
-        row.querySelector(".dyn-remove").addEventListener("click", () => { el._items.splice(idx, 1); drawDynList(el); });
-      } catch (e) {
-        row.innerHTML = `<span style="color:var(--danger)">渲染行出错：${esc(e.message)}</span>`;
-      }
+      row.innerHTML = el._tpl(it).join("") +
+        `<button class="dyn-remove" type="button" aria-label="删除"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M6 18L18 6" stroke-linecap="round"/></svg></button>`;
+      row.querySelector(".dyn-remove").addEventListener("click", () => { el._items.splice(idx, 1); drawDynList(el); });
       el.appendChild(row);
     });
   }
   function addDynRow(container, tpl, newItem, singleKey) {
     const el = typeof container === "string" ? $(container) : container;
-    if (!el) { console.warn("addDynRow: container not found", container); return; }
-    if (!el._items) { el._items = []; }
-    if (!el._tpl) el._tpl = tpl;
-    if (singleKey !== undefined) el._singleKey = singleKey;
+    if (!el) return;
+    if (!el._items) { el._items = []; el._tpl = tpl; el._singleKey = singleKey; }
     el._items.push(newItem);
     drawDynList(el);
   }
@@ -926,7 +919,6 @@
       }
       const obj = {};
       inputs.forEach((inp) => { const k = inp.getAttribute("data-k"); if (k) obj[k] = val(inp); });
-      // 数字字段转 number
       if ("level" in obj) obj.level = Number(obj.level) || 0;
       return obj;
     });
