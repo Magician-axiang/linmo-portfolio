@@ -1,0 +1,152 @@
+/* 初始示例内容 — 被 setup.js 与 seed.js 共用 */
+
+export const initialSettings = {
+  hero: {
+    status: "正在接单 · 接受 2026 Q4 档期",
+    title_lead: "用画面讲好",
+    title_highlight: "每一个故事",
+    intro: "我是{NAME}，独立视频剪辑师与新媒体创作者。专注品牌广告、社媒短视频与海外营销内容，把好想法剪成让人愿意看完的画面。",
+    name: "林墨",
+    tags: ["视频剪辑", "后期调色", "短视频导演", "海外营销", "内容策划"],
+    stats: [
+      { value: "6", suffix: "+", label: "年创作经验" },
+      { value: "320", suffix: "+", label: "交付项目" },
+      { value: "48", suffix: "M", label: "全网播放量" },
+    ],
+    hero_image: "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=cinematic%20portrait%20of%20a%20young%20creative%20video%20editor%20at%20work%20in%20dim%20studio%20with%20monitors%20glow%2C%20moody%20amber%20lighting%2C%20film%20noir%20atmosphere&image_size=portrait_4_3",
+    latest_title: "“海岸线”品牌片",
+    latest_duration: "02:14",
+  },
+  about: {
+    name: "林墨",
+    paragraphs: [
+      "我是林墨，一名常驻上海/远程协作的独立视频剪辑师与新媒体创作者。过去 6 年里，我为品牌、机构与独立创作者交付了 320+ 条成片，覆盖广告、纪录、MV 与社媒短视频。",
+      "我相信剪辑不只是“把素材拼起来”，而是用节奏、留白与色彩，让一个好想法被真正看完。除剪辑与后期外，我也长期跟进海外平台的内容策略，帮作品找到对的观众。",
+    ],
+    avatar: "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=professional%20portrait%20headshot%20of%20a%20young%20asian%20creative%20professional%2C%20calm%20confident%20expression%2C%20dark%20background%2C%20soft%20amber%20rim%20light&image_size=portrait_4_3",
+    info_rows: [
+      { label: "身份", value: "独立剪辑师 / 内容创作者" },
+      { label: "常驻", value: "上海 · 支持远程协作" },
+      { label: "擅长", value: "品牌广告 · 社媒短视频" },
+      { label: "语言", value: "中文 · English" },
+      { label: "工具", value: "Pr / DaVinci / AE" },
+      { label: "档期", value: "2026 Q4 起接单" },
+    ],
+    brands: ["海岸线", "NORTECH", "夜航音乐", "街味", "守艺计划"],
+  },
+  contact: {
+    email: "hello@linmo.studio",
+    location: "上海 · 全球远程",
+    response_time: "工作日 24h 内",
+    socials: [
+      { name: "YouTube", url: "https://youtube.com" },
+      { name: "Bilibili", url: "https://bilibili.com" },
+      { name: "Instagram", url: "https://instagram.com" },
+      { name: "Email", url: "mailto:hello@linmo.studio" },
+    ],
+  },
+  skills: [
+    {
+      category: "剪辑",
+      title: "剪辑",
+      desc: "以叙事节奏为核心，从粗剪到精剪把控整体结构与情绪走向。",
+      items: [
+        { name: "叙事剪辑", level: 95 },
+        { name: "节奏与转场", level: 90 },
+        { name: "多机位对齐", level: 85 },
+      ],
+      tags: ["Premiere Pro", "DaVinci", "Final Cut"],
+    },
+    {
+      category: "后期",
+      title: "后期",
+      desc: "调色、声音与特效综合处理，让画面质感与情绪氛围统一。",
+      items: [
+        { name: "电影级调色", level: 92 },
+        { name: "声音设计", level: 80 },
+        { name: "动效与合成", level: 78 },
+      ],
+      tags: ["DaVinci Resolve", "After Effects", "Pro Tools"],
+    },
+    {
+      category: "海外营销",
+      title: "海外营销",
+      desc: "面向 YouTube / TikTok / Instagram 的内容本地化与增长策略。",
+      items: [
+        { name: "内容本地化", level: 88 },
+        { name: "平台增长策略", level: 82 },
+        { name: "跨文化叙事", level: 75 },
+      ],
+      tags: ["YouTube", "TikTok", "Instagram"],
+    },
+  ],
+  flow: [
+    { no: "01", title: "需求沟通", desc: "明确目标、受众与平台，输出创意简报。" },
+    { no: "02", title: "脚本分镜", desc: "梳理叙事结构与节奏，提供分镜参考。" },
+    { no: "03", title: "剪辑后期", desc: "粗剪→精剪→调色→声音，多版本预览。" },
+    { no: "04", title: "交付上线", desc: "多规格输出，配合平台优化与上线复盘。" },
+  ],
+  site_meta: {
+    site_name: "林墨",
+    logo_char: "墨",
+    title_suffix: "视频剪辑与新媒体创作",
+    footer_text: "© 2026 林墨 · 个人作品集",
+  },
+};
+
+export const initialWorks = [
+  {
+    title: "“海岸线” 品牌广告片",
+    description: "为某高端护肤品牌打造的秋季形象片，负责脚本打磨、剪辑与调色。",
+    category: "广告片", badge: "广告片",
+    video_url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    video_type: "youtube",
+    thumbnail: "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=luxury%20brand%20fashion%20commercial%20still%2C%20elegant%20model%20in%20amber%20gown%2C%20golden%20hour%20cinematic%20lighting&image_size=landscape_4_3",
+    role: "导演 / 剪辑", year: "2026", duration: "02:14", sort_order: 0,
+  },
+  {
+    title: "“远方” 旅行 Vlog 系列",
+    description: "12 集横穿中国的旅行短片，单集平均播放 80 万+，负责全程剪辑与节奏设计。",
+    category: "Vlog", badge: "Vlog",
+    video_url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    video_type: "youtube",
+    thumbnail: "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=travel%20vlog%20cinematic%20shot%20of%20misty%20mountain%20road%20at%20dawn%2C%20warm%20golden%20light%2C%20aerial%20view&image_size=landscape_4_3",
+    role: "剪辑 / 调色", year: "2025", duration: "08:32", sort_order: 1,
+  },
+  {
+    title: "某科技品牌 发布会视频",
+    description: "产品主视频 + 现场串片，从素材整理到成片交付 5 天完成，配合现场节奏。",
+    category: "发布会", badge: "发布会",
+    video_url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    video_type: "youtube",
+    thumbnail: "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=sleek%20tech%20product%20launch%20video%20still%2C%20modern%20gadget%20on%20dark%20background%2C%20dramatic%20studio%20lighting&image_size=landscape_4_3",
+    role: "后期总监", year: "2025", duration: "01:48", sort_order: 2,
+  },
+  {
+    title: "“街味” 社媒短视频系列",
+    description: "为本地美食账号打造 30 条竖屏短视频，3 个月内涨粉 22 万，单条最高 480 万播放。",
+    category: "短视频", badge: "短视频",
+    video_url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    video_type: "youtube",
+    thumbnail: "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=vertical%20social%20media%20short%20video%20frame%2C%20vibrant%20street%20food%20scene%2C%20energetic%20mood%2C%20colorful%20but%20cinematic&image_size=landscape_4_3",
+    role: "策划 / 剪辑", year: "2025", duration: "00:45", sort_order: 3,
+  },
+  {
+    title: "独立音乐人 《夜航》MV",
+    description: "从分镜到成片独立完成，用低饱和冷调与一镜到底呈现都市夜行的心境。",
+    category: "MV", badge: "MV",
+    video_url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    video_type: "youtube",
+    thumbnail: "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=music%20video%20cinematic%20frame%2C%20lone%20singer%20with%20microphone%20in%20spotlight%2C%20moody%20amber%20and%20teal%20lighting&image_size=landscape_4_3",
+    role: "导演 / 剪辑 / 调色", year: "2024", duration: "03:56", sort_order: 4,
+  },
+  {
+    title: "“守艺” 手艺人纪录短片",
+    description: "跟踪拍摄三位非遗手艺人，独立完成剪辑与声音设计，入围独立影展短片单元。",
+    category: "纪录短片", badge: "纪录短片",
+    video_url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    video_type: "youtube",
+    thumbnail: "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=documentary%20film%20still%2C%20artisan%20craftsman%20hands%20working%2C%20natural%20window%20light%2C%20intimate%20and%20warm%20mood&image_size=landscape_4_3",
+    role: "剪辑 / 声音设计", year: "2024", duration: "12:20", sort_order: 5,
+  },
+];
