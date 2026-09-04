@@ -33,7 +33,7 @@ router.post("/login", async (req, res) => {
 /** POST /api/auth/logout */
 router.post("/logout", (req, res) => {
   req.session.destroy(() => {});
-  res.clearCookie("connect.sid");
+  res.clearCookie("sid");
   return res.json({ ok: true });
 });
 
