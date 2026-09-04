@@ -1,0 +1,151 @@
+/* =========================================================
+   林墨个人作品集 — 公开页样式（数据驱动版）
+   ========================================================= */
+
+:root {
+  --bg: #08080b;
+  --bg-card: #0d0d12;
+  --border: rgba(255, 255, 255, 0.08);
+  --text: #f4f4f5;
+  --muted: #a1a1aa;
+  --gold: #fbbf24;
+}
+
+* { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+html { scroll-behavior: smooth; scroll-padding-top: 100px; }
+body {
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(1200px 600px at 80% -10%, rgba(251,191,36,.08), transparent 60%),
+    radial-gradient(900px 500px at 0% 10%, rgba(245,158,11,.05), transparent 55%);
+  background-attachment: fixed;
+}
+
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: #0a0a0e; }
+::-webkit-scrollbar-thumb { background: #2a2a33; border-radius: 999px; border: 2px solid #0a0a0e; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+/* 背景装饰 */
+.orb { position:absolute; border-radius:50%; filter:blur(80px); opacity:.5; pointer-events:none; }
+.orb-1 { width:420px; height:420px; top:-120px; right:-100px;
+  background:radial-gradient(circle, rgba(251,191,36,.18), transparent 70%); animation:float 14s ease-in-out infinite; }
+.orb-2 { width:360px; height:360px; bottom:-80px; left:-80px;
+  background:radial-gradient(circle, rgba(245,158,11,.12), transparent 70%); animation:float 18s ease-in-out infinite reverse; }
+@keyframes float { 0%,100%{transform:translate(0,0);} 50%{transform:translate(30px,-40px);} }
+.grain { position:absolute; inset:0; opacity:.025;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+/* 导航 */
+#navbar.scrolled .bg-ink-900\/60 { background-color: rgba(8,8,11,.85); }
+.nav-link { position:relative; transition:color .2s; }
+.nav-link::after { content:""; position:absolute; left:0; bottom:-4px; height:2px; width:0; background:var(--gold); transition:width .3s ease; }
+.nav-link:hover { color:#fff; }
+.nav-link:hover::after { width:100%; }
+
+/* 通用 */
+.tag { display:inline-flex; align-items:center; padding:.4rem .9rem; font-size:.8rem; color:#d4d4d8;
+  border:1px solid var(--border); border-radius:999px; background:rgba(255,255,255,.03); transition:all .25s; }
+.tag:hover { color:var(--gold); border-color:rgba(251,191,36,.4); background:rgba(251,191,36,.06); }
+
+.section-eyebrow { display:inline-block; font-size:.72rem; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); font-weight:500; }
+.section-title { font-family:"Space Grotesk",Inter,sans-serif; font-size:clamp(1.8rem,4vw,2.75rem); font-weight:700; line-height:1.1; color:#fff; }
+
+/* 作品卡片 */
+.work-card { position:relative; border-radius:1.25rem; border:1px solid var(--border);
+  background:linear-gradient(180deg, rgba(20,20,27,.6), rgba(13,13,18,.6)); overflow:hidden; cursor:pointer;
+  transition:transform .4s cubic-bezier(.22,1,.36,1), border-color .4s, box-shadow .4s; }
+.work-card:hover { transform:translateY(-6px); border-color:rgba(251,191,36,.35);
+  box-shadow:0 20px 50px -20px rgba(0,0,0,.8), 0 0 0 1px rgba(251,191,36,.1); }
+.card-media { position:relative; aspect-ratio:4/3; overflow:hidden; }
+.card-media img { width:100%; height:100%; object-fit:cover; transition:transform .7s cubic-bezier(.22,1,.36,1), filter .4s; filter:brightness(.85) saturate(.95); }
+.work-card:hover .card-media img { transform:scale(1.08); filter:brightness(.95) saturate(1.05); }
+.card-badge { position:absolute; top:.9rem; left:.9rem; font-size:.7rem; padding:.25rem .6rem; border-radius:999px;
+  background:rgba(8,8,11,.7); border:1px solid var(--border); backdrop-filter:blur(8px); color:#fff; }
+.card-overlay { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; gap:.75rem;
+  background:linear-gradient(180deg, rgba(8,8,11,.1), rgba(8,8,11,.55)); opacity:0; transition:opacity .4s ease; }
+.work-card:hover .card-overlay { opacity:1; }
+.card-play { display:grid; place-items:center; width:3.25rem; height:3.25rem; border-radius:50%; background:var(--gold); color:#08080b;
+  transform:scale(.6); transition:transform .4s cubic-bezier(.22,1,.36,1); }
+.card-play svg { width:1.25rem; height:1.25rem; transform:translateX(1px); }
+.work-card:hover .card-play { transform:scale(1); }
+.card-meta { position:absolute; bottom:.9rem; right:.9rem; display:flex; align-items:center; gap:.4rem; font-size:.72rem;
+  color:#e4e4e7; padding:.3rem .65rem; border-radius:999px; background:rgba(8,8,11,.7); backdrop-filter:blur(8px); border:1px solid var(--border); }
+.card-body { padding:1.25rem 1.4rem 1.4rem; }
+.card-title { font-family:"Space Grotesk",Inter,sans-serif; font-size:1.1rem; font-weight:600; color:#fff; transition:color .25s; }
+.work-card:hover .card-title { color:var(--gold); }
+.card-desc { margin-top:.5rem; font-size:.875rem; line-height:1.6; color:var(--muted); }
+.card-foot { margin-top:1rem; padding-top:1rem; border-top:1px solid var(--border); display:flex; justify-content:space-between; font-size:.78rem; color:#71717a; }
+
+/* 技能 */
+.skill-card { position:relative; border-radius:1.5rem; border:1px solid var(--border);
+  background:linear-gradient(180deg, rgba(20,20,27,.5), rgba(13,13,18,.5)); padding:2rem; transition:border-color .3s, transform .3s; }
+.skill-card:hover { border-color:rgba(251,191,36,.3); transform:translateY(-4px); }
+.skill-icon { display:grid; place-items:center; width:3.25rem; height:3.25rem; border-radius:1rem; border:1px solid var(--border);
+  background:rgba(251,191,36,.06); color:var(--gold); }
+.skill-icon svg { width:1.6rem; height:1.6rem; }
+.skill-title { margin-top:1.25rem; font-family:"Space Grotesk",Inter,sans-serif; font-size:1.3rem; font-weight:600; color:#fff; }
+.skill-desc { margin-top:.5rem; font-size:.9rem; line-height:1.6; color:var(--muted); }
+.skill-list { margin-top:1.5rem; display:flex; flex-direction:column; gap:.9rem; }
+.skill-list li { display:grid; grid-template-columns:1fr auto; align-items:center; gap:1rem; font-size:.82rem; color:#d4d4d8; }
+.bar { position:relative; width:8rem; max-width:50vw; height:5px; border-radius:999px; background:rgba(255,255,255,.08); overflow:hidden; }
+.bar i { position:absolute; inset:0; width:0; border-radius:999px; background:linear-gradient(90deg, var(--gold), #f59e0b); transition:width 1.2s cubic-bezier(.22,1,.36,1); }
+.bar.animated i { width:var(--w); }
+.skill-tags { margin-top:1.5rem; display:flex; flex-wrap:wrap; gap:.5rem; }
+.skill-tags span { font-size:.75rem; padding:.3rem .7rem; border-radius:999px; color:#a1a1aa; border:1px solid var(--border); background:rgba(255,255,255,.02); }
+
+.flow-step { position:relative; padding-left:.25rem; }
+.flow-no { font-family:"Space Grotesk",Inter,sans-serif; font-size:.85rem; font-weight:600; color:var(--gold); letter-spacing:.1em; }
+.flow-step h4 { margin-top:.5rem; font-size:1.05rem; font-weight:600; color:#fff; }
+.flow-step p { margin-top:.4rem; font-size:.85rem; color:var(--muted); line-height:1.6; }
+
+/* 关于 */
+.info-row { display:flex; flex-direction:column; gap:.2rem; padding-bottom:.75rem; border-bottom:1px solid var(--border); }
+.info-row dt { font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:#71717a; }
+.info-row dd { color:#e4e4e7; }
+.brand { font-family:"Space Grotesk",Inter,sans-serif; font-weight:600; font-size:1rem; color:#a1a1aa; transition:color .25s; }
+.brand:hover { color:var(--gold); }
+
+/* 联系 */
+.contact-item { display:flex; align-items:center; gap:.9rem; }
+.contact-ic { display:grid; place-items:center; width:2.75rem; height:2.75rem; flex-shrink:0; border-radius:.9rem;
+  border:1px solid var(--border); background:rgba(251,191,36,.05); color:var(--gold); }
+.contact-ic svg { width:1.2rem; height:1.2rem; }
+.social { display:grid; place-items:center; width:2.75rem; height:2.75rem; border-radius:.9rem; border:1px solid var(--border);
+  background:rgba(255,255,255,.02); color:#a1a1aa; transition:all .25s; }
+.social:hover { color:var(--gold); border-color:rgba(251,191,36,.4); background:rgba(251,191,36,.06); transform:translateY(-2px); }
+.social svg { width:1.15rem; height:1.15rem; }
+
+/* 表单 */
+.field { display:flex; flex-direction:column; gap:.4rem; }
+.field-label { font-size:.8rem; color:#a1a1aa; }
+.input { width:100%; padding:.7rem .95rem; font-size:.9rem; color:#fff; background:rgba(255,255,255,.03);
+  border:1px solid var(--border); border-radius:.75rem; outline:none; transition:border-color .2s, background .2s; }
+.input::placeholder { color:#52525b; }
+.input:focus { border-color:rgba(251,191,36,.5); background:rgba(251,191,36,.04); }
+select.input { appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23a1a1aa' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right .7rem center; background-size:1.1rem; padding-right:2.2rem; }
+
+/* 回到顶部 */
+#toTop.show { opacity:1; transform:translateY(0); pointer-events:auto; }
+
+/* 滚动出现动画 */
+.reveal { opacity:0; transform:translateY(28px); transition:opacity .8s cubic-bezier(.22,1,.36,1), transform .8s cubic-bezier(.22,1,.36,1); }
+.reveal.visible { opacity:1; transform:translateY(0); }
+.reveal:nth-child(2){transition-delay:.08s;} .reveal:nth-child(3){transition-delay:.16s;}
+.reveal:nth-child(4){transition-delay:.24s;} .reveal:nth-child(5){transition-delay:.32s;} .reveal:nth-child(6){transition-delay:.4s;}
+
+/* 视频弹窗 */
+#videoFrame iframe, #videoFrame video { width:100%; height:100%; border:0; display:block; }
+
+/* 响应式 */
+@media (max-width:640px) {
+  .skill-list li { grid-template-columns:1fr; gap:.4rem; }
+  .bar { width:100%; max-width:100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,*::before,*::after { animation-duration:.01ms!important; animation-iteration-count:1!important;
+    transition-duration:.01ms!important; scroll-behavior:auto!important; }
+  .reveal { opacity:1; transform:none; }
+}
