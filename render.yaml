@@ -29,3 +29,4 @@ services:
       # 上传视频单文件上限（MB）
       - key: MAX_VIDEO_SIZE_MB
         value: "200"
+      # 触发 redeploy
