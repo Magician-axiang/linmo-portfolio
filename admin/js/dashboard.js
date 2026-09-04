@@ -884,10 +884,10 @@
   function buildDynList(container, items, cellTpl, singleKey) {
     const el = typeof container === "string" ? $(container) : container;
     if (!el) { console.warn("buildDynList: container not found", container); return; }
-    if (!Array.isArray(items) || !items.length) items = [];
+    if (!Array.isArray(items)) items = [];
     el._tpl = cellTpl;
     el._singleKey = singleKey;
-    el._items = items.map(it => ({...it})); // 浅拷贝，避免原数据被修改
+    el._items = items.slice(); // 浅拷贝数组，保持原元素引用
     drawDynList(el);
   }
   function drawDynList(el) {
