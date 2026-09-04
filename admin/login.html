@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>管理后台登录 · 林墨作品集</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body class="login-body">
+  <div class="login-orb login-orb-1"></div>
+  <div class="login-orb login-orb-2"></div>
+  <main class="login-wrap">
+    <div class="login-card">
+      <a href="/" class="login-brand">
+        <span class="login-logo">墨</span>
+        <span>林墨作品集 <span class="dot">·</span> 管理后台</span>
+      </a>
+      <h1 class="login-title">欢迎回来</h1>
+      <p class="login-sub">登录以管理你的作品与内容</p>
+      <form id="loginForm" class="login-form" autocomplete="off">
+        <label class="l-field">
+          <span class="l-label">账号</span>
+          <input type="text" name="username" required placeholder="admin" autocomplete="username" />
+        </label>
+        <label class="l-field">
+          <span class="l-label">密码</span>
+          <div class="l-pw">
+            <input type="password" name="password" required placeholder="••••••••" autocomplete="current-password" id="pwInput" />
+            <button type="button" id="togglePw" class="l-eye" aria-label="显示密码">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </label>
+        <p id="loginMsg" class="l-msg hidden"></p>
+        <button type="submit" id="loginBtn" class="l-submit">
+          <span class="l-submit-text">登录</span>
+          <span class="l-spinner hidden"></span>
+        </button>
+      </form>
+      <p class="login-foot">返回 <a href="/">公开首页</a></p>
+    </div>
+  </main>
+  <script src="js/login.js"></script>
+</body>
+</html>
+
