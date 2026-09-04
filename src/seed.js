@@ -13,4 +13,3 @@ ensureDatabase({ log: true })
     console.error("[seed] 失败:", err.message);
     process.exit(1);
   });
-

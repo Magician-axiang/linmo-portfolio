@@ -25,7 +25,7 @@ export async function ensureDatabase({ log = true } = {}) {
   if (aExists.rowCount === 0) {
     const hash = await bcrypt.hash(adminPass, 10);
     await query("INSERT INTO admin_users (username, password_hash) VALUES ($1, $2)", [adminUser, hash]);
-    if (log) console.log("[setup] ✓ 创建管理员: " + adminUser);
+    if (log) console.log(`[setup] ✓ 创建管理员: ${adminUser}`);
   }
 
   // 3. 站点配置（仅当 hero 为空 → 尚未配置过）
@@ -61,7 +61,6 @@ export async function ensureDatabase({ log = true } = {}) {
          w.thumbnail, w.role, w.year, w.duration, w.badge, w.sort_order]
       );
     }
-    if (log) console.log("[setup] ✓ 写入 " + initialWorks.length + " 条示例作品");
+    if (log) console.log(`[setup] ✓ 写入 ${initialWorks.length} 条示例作品`);
   }
 }
-

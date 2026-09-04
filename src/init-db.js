@@ -18,4 +18,3 @@ initDb().catch((err) => {
   console.error("[db] 初始化失败:", err);
   process.exit(1);
 });
-

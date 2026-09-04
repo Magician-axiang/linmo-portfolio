@@ -37,4 +37,3 @@ export const one = async (text, params) => {
   const { rows } = await pool.query(text, params);
   return rows[0] || null;
 };
-

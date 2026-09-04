@@ -99,7 +99,7 @@ window.Main = (function () {
         showMsg("请填写姓名和邮箱，方便我联系你。", true);
         return;
       }
-      showMsg("感谢 " + name + "！已收到你的「" + type + "」需求，我会通过 " + email + " 在 24 小时内回复你。", false);
+      showMsg(`感谢 ${name}！已收到你的「${type}」需求，我会通过 ${email} 在 24 小时内回复你。`, false);
       form.reset();
     });
     function showMsg(text, isError) {
@@ -131,4 +131,3 @@ window.Main = (function () {
 
   return { init };
 })();
-
