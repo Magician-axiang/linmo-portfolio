@@ -1,5 +1,5 @@
-# Render 蓝图 — 一键部署 Web 服务 + PostgreSQL
-# Render 自动创建 PostgreSQL 并注入 DATABASE_URL，无需手动配置
+# Render 蓝图 — 只部署 Web 服务
+# PostgreSQL 需单独创建（Render Postgres 或 Neon），然后填 DATABASE_URL
 services:
   - type: web
     name: linmo-portfolio
@@ -20,21 +20,12 @@ services:
         value: admin
       - key: ADMIN_PASSWORD
         sync: false # 在 Render 面板填强密码
-      # Render 自带 Postgres，无需强制 SSL
+      # 数据库连接串，在 Render 面板填
+      - key: DATABASE_URL
+        sync: false
+      # Render 自带 Postgres 不用强制 SSL；Neon 才需要 require
       - key: PG_SSL
         value: prefer
       # 上传视频单文件上限（MB）
       - key: MAX_VIDEO_SIZE_MB
         value: "200"
-
-  - type: postgres
-    name: linmo-portfolio-db
-    plan: free
-    # 自动注入 DATABASE_URL 到 web 服务
-    databases:
-      - name: linmo_portfolio
-    envVars:
-      - key: DATABASE_URL
-        fromDatabase:
-          name: linmo-portfolio-db
-          property: connectionString
