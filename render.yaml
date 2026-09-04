@@ -1,6 +1,5 @@
-# Render 蓝图 — 连接仓库后 Render 自动创建本服务并读取以下配置
-# 说明：数据库用 Neon（免费、永久），不在此处建 Render Postgres
-#       （Render 免费 Postgres 30 天后会删数据，不适合长期作品集）
+# Render 蓝图 — 一键部署 Web 服务 + PostgreSQL
+# Render 自动创建 PostgreSQL 并注入 DATABASE_URL，无需手动配置
 services:
   - type: web
     name: linmo-portfolio
@@ -16,16 +15,26 @@ services:
       # 会话密钥自动生成
       - key: SESSION_SECRET
         generateValue: true
-      # 管理员账号（默认 admin，密码在 Render 创建时手动填）
+      # 管理员账号
       - key: ADMIN_USERNAME
         value: admin
       - key: ADMIN_PASSWORD
         sync: false # 在 Render 面板填强密码
-      # Neon 数据库连接串，在 Render 面板粘贴
-      - key: DATABASE_URL
-        sync: false
+      # Render 自带 Postgres，无需强制 SSL
       - key: PG_SSL
-        value: require
+        value: prefer
       # 上传视频单文件上限（MB）
       - key: MAX_VIDEO_SIZE_MB
         value: "200"
+
+  - type: postgres
+    name: linmo-portfolio-db
+    plan: free
+    # 自动注入 DATABASE_URL 到 web 服务
+    databases:
+      - name: linmo_portfolio
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: linmo-portfolio-db
+          property: connectionString
