@@ -65,6 +65,9 @@ window.App = (function () {
       `{NAME}`,
       name
     );
+    const hv = String(hero.hero_video || "").trim();
+    const isDirectVideo =
+      /^\/uploads\/videos\//.test(hv) || /\.(mp4|webm|ogg)(\?.*)?$/i.test(hv);
 
     el.innerHTML = `
       <div class="lg:col-span-7">
@@ -96,11 +99,20 @@ window.App = (function () {
         <div class="relative mx-auto max-w-md">
           <div class="absolute -inset-4 bg-gradient-to-tr from-gold-500/20 via-transparent to-transparent rounded-3xl blur-2xl"></div>
           <div class="relative overflow-hidden rounded-3xl border border-white/10 bg-ink-800">
-            ${hero.hero_image ? `<img src="${esc(hero.hero_image)}" alt="工作场景" loading="lazy" class="aspect-[4/5] w-full object-cover opacity-90" />` : ""}
-            <div class="absolute inset-0 bg-gradient-to-t from-ink-950 via-ink-950/30 to-transparent"></div>
-            <div class="absolute bottom-5 left-5 right-5 flex items-center justify-between rounded-2xl border border-white/10 bg-ink-900/80 p-3 backdrop-blur-md">
+            <div class="relative aspect-[4/5] w-full">
+              ${hero.hero_image ? `<img id="heroPoster" src="${esc(hero.hero_image)}" alt="工作场景" loading="lazy" class="absolute inset-0 h-full w-full object-cover opacity-90" />` : `<div class="absolute inset-0 bg-ink-700"></div>`}
+              ${isDirectVideo ? `<video id="heroVid" class="absolute inset-0 hidden h-full w-full object-cover" src="${esc(hv)}" preload="metadata" playsinline></video>` : ""}
+              ${hv ? `
+              <button id="heroPlayBtn" type="button" aria-label="播放视频" class="group absolute inset-0 grid place-items-center">
+                <span class="grid h-16 w-16 place-items-center rounded-full bg-gold-400/95 text-ink-950 shadow-xl shadow-black/40 transition group-hover:scale-110">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="ml-1 h-7 w-7" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                </span>
+              </button>` : ""}
+            </div>
+            <div id="heroBottomMask" class="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink-950 via-ink-950/30 to-transparent"></div>
+            <div id="heroLatestCard" class="absolute bottom-5 left-5 right-5 flex items-center justify-between rounded-2xl border border-white/10 bg-ink-900/80 p-3 backdrop-blur-md">
               <div class="flex items-center gap-3">
-                <span class="grid h-10 w-10 place-items-center rounded-xl bg-gold-400 text-ink-950">
+                <span id="heroCardPlay" class="grid h-10 w-10 place-items-center rounded-xl bg-gold-400 text-ink-950 ${hv ? "cursor-pointer" : ""}">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
                 </span>
                 <div>
@@ -114,6 +126,30 @@ window.App = (function () {
         </div>
       </div>
     `;
+
+    /* 视频播放：直链文件内联播放；YouTube / B站 等外链用弹窗播放 */
+    const playBtn = document.getElementById("heroPlayBtn");
+    const cardPlay = document.getElementById("heroCardPlay");
+    const playHeroVideo = () => {
+      if (!hv) return;
+      const vid = document.getElementById("heroVid");
+      if (vid) {
+        vid.classList.remove("hidden");
+        vid.controls = true;
+        const poster = document.getElementById("heroPoster");
+        if (poster) poster.classList.add("hidden");
+        const mask = document.getElementById("heroBottomMask");
+        const card = document.getElementById("heroLatestCard");
+        if (mask) mask.classList.add("hidden");
+        if (card) card.classList.add("hidden");
+        if (playBtn) playBtn.classList.add("hidden");
+        vid.play().catch(() => {});
+      } else {
+        openVideoModal({ video_url: hv, video_type: "link", title: hero.latest_title || "作品视频", description: "" });
+      }
+    };
+    if (playBtn) playBtn.addEventListener("click", playHeroVideo);
+    if (cardPlay && hv) cardPlay.addEventListener("click", playHeroVideo);
   }
 
   /* ---------- 作品 ---------- */
