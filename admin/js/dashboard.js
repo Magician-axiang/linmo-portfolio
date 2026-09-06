@@ -191,6 +191,9 @@
         <div class="card-head" style="margin-top:1.5rem"><div><div class="card-h">Hero 视觉图</div><div class="card-sub">可填图片链接或直接上传</div></div></div>
         ${renderUpload("h_heroImg", h.hero_image)}
 
+        <div class="card-head" style="margin-top:1.5rem"><div><div class="card-h">Hero 视频</div><div class="card-sub">上传视频文件（≤200MB）或粘贴 mp4 / YouTube / B站 链接。设置后访客点击首页右侧画面即可播放</div></div></div>
+        ${renderVideoUpload("h_heroVid", h.hero_video)}
+
         <div class="card-head" style="margin-top:1.5rem"><div><div class="card-h">最新作品卡片</div></div></div>
         <div class="form-grid">
           <label class="field"><span class="field-label">最新作品标题</span><input class="input" id="h_latestT" value="${esc(h.latest_title || "")}" /></label>
@@ -215,6 +218,7 @@
       `<input class="input" data-k="label" placeholder="说明" value="${esc(it.label)}" />`,
     ], { value: "", suffix: "", label: "" }));
     bindUpload("h_heroImg");
+    bindVideoUpload("h_heroVid");
     $("#h_save").addEventListener("click", saveHero);
   }
 
@@ -228,6 +232,7 @@
       tags: readChips("h_tags"),
       stats: readDynList("h_stats"),
       hero_image: readUpload("h_heroImg"),
+      hero_video: readVideoUpload("h_heroVid"),
       latest_title: val($("#h_latestT")),
       latest_duration: val($("#h_latestD")),
     };
@@ -988,6 +993,57 @@
     });
   }
   function readUpload(id) {
+    const input = $(`#${id}_url`);
+    return input ? input.value.trim() : "";
+  }
+
+  /* =========================================================
+     组件：视频上传（Hero 视频等，复用 /api/admin/upload-video）
+     ========================================================= */
+  function renderVideoUpload(id, currentUrl) {
+    return `
+      <div class="upload-box" id="${id}_box">
+        <div class="upload-preview" id="${id}_prev">
+          ${currentUrl
+            ? `<video src="${esc(currentUrl)}" controls preload="metadata" style="width:100%;max-height:260px;border-radius:10px;background:#000"></video>`
+            : `<div class="ph">无视频</div>`}
+        </div>
+        <div class="upload-actions">
+          <label class="btn btn-sm upload-file">上传视频（≤200MB）
+            <input type="file" accept="video/*" data-vupload="${id}" style="display:none" />
+          </label>
+          <input class="input" id="${id}_url" placeholder="或粘贴视频链接（mp4 直链 / YouTube / B站）" value="${esc(currentUrl)}" />
+        </div>
+      </div>`;
+  }
+  function bindVideoUpload(id) {
+    const fileInput = $(`[data-vupload="${id}"]`);
+    const urlInput = $(`#${id}_url`);
+    const prev = $(`#${id}_prev`);
+    const showPrev = (url) => {
+      prev.innerHTML = url
+        ? `<video src="${esc(url)}" controls preload="metadata" style="width:100%;max-height:260px;border-radius:10px;background:#000"></video>`
+        : `<div class="ph">无视频</div>`;
+    };
+    if (fileInput) fileInput.addEventListener("change", async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      if (!/^video\//.test(file.type)) { toast("请选择视频文件（mp4 / webm 等）", "err"); return; }
+      if (file.size > 200 * 1024 * 1024) { toast("视频过大（上限 200MB）", "err"); return; }
+      let lastPct = -1;
+      try {
+        const d = await uploadVideoXHR(file, (p) => {
+          const pct = Math.round(p);
+          if (pct >= lastPct + 10) { lastPct = pct; toast(`视频上传中… ${pct}%`, "ok"); }
+        });
+        urlInput.value = d.url;
+        showPrev(d.url);
+        toast("视频已上传，记得点击保存");
+      } catch (err) { toast(err.message || "视频上传失败", "err"); }
+    });
+    if (urlInput) urlInput.addEventListener("input", () => showPrev(urlInput.value.trim()));
+  }
+  function readVideoUpload(id) {
     const input = $(`#${id}_url`);
     return input ? input.value.trim() : "";
   }
