@@ -791,7 +791,7 @@
     };
     await saveSection("site_meta", meta, "#m_saved", "#m_save");
     state.site_meta = meta;
-    document.title = "管理后台 · " + (meta.site_name || "林墨");
+    document.title = "管理后台 · " + (meta.site_name || "Magician-阿祥");
   }
 
   /* =========================================================
