@@ -394,7 +394,7 @@ window.App = (function () {
 
   /* ---------- 元信息 ---------- */
   function renderMeta(meta, hero) {
-    const siteName = (meta && meta.site_name) || "林墨";
+    const siteName = (meta && meta.site_name) || "Magician-阿祥";
     document.getElementById("navLogo").textContent = (meta && meta.logo_char) || siteName.charAt(0);
     document.getElementById("footerLogo").textContent = (meta && meta.logo_char) || siteName.charAt(0);
     const nameHtml = `${esc(siteName)}<span class="text-gold-400">.</span>`;
