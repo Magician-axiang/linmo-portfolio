@@ -305,9 +305,16 @@ window.App = (function () {
       el.innerHTML = "";
       return;
     }
-    const socials = (contact.socials || [])
+    const socialList = (contact.socials || [])
       .map(
-        (s) => `<a href="${esc(s.url)}" class="social" aria-label="${esc(s.name)}" target="_blank" rel="noopener">${socialIcon(s.name)}</a>`
+        (s) => `
+          <li class="contact-item">
+            <span class="contact-ic">${socialIcon(s.name)}</span>
+            <div>
+              <div class="text-zinc-500 text-xs">${esc(s.name || "社交链接")}</div>
+              <a href="${esc(s.url)}" class="text-white hover:text-gold-300 transition break-all" target="_blank" rel="noopener">${esc(s.url || "")}</a>
+            </div>
+          </li>`
       )
       .join("");
 
@@ -329,8 +336,8 @@ window.App = (function () {
             <span class="contact-ic">${socialIcon("Clock")}</span>
             <div><div class="text-zinc-500 text-xs">响应时间</div><span class="text-white">${esc(contact.response_time || "")}</span></div>
           </li>
+          ${socialList}
         </ul>
-        <div class="mt-8 flex gap-3">${socials}</div>
       </div>
       <div class="lg:col-span-7 reveal">
         <form id="contactForm" class="rounded-3xl border border-white/10 bg-ink-900/50 p-6 sm:p-8 backdrop-blur" onsubmit="return false;">
@@ -361,6 +368,10 @@ window.App = (function () {
     if (n === "youtube") return '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M23 12s0-3.5-.5-5a2.6 2.6 0 00-1.8-1.8C19 5 12 5 12 5s-7 0-8.7.2A2.6 2.6 0 001.5 7C1 8.5 1 12 1 12s0 3.5.5 5a2.6 2.6 0 001.8 1.8C5 19 12 19 12 19s7 0 8.7-.2a2.6 2.6 0 001.8-1.8c.5-1.5.5-5 .5-5zM10 15.5v-7l6 3.5-6 3.5z"/></svg>';
     if (n === "bilibili") return '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 4l3.5 3h7L19 4l-1 3h1a3 3 0 013 3v8a3 3 0 01-3 3H5a3 3 0 01-3-3v-8a3 3 0 013-3h1l-1-3zm3 7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2v-2a1 1 0 10-2 0v2H8z"/></svg>';
     if (n === "instagram") return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>';
+    if (n === "douyin" || n === "抖音") return '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 3c.3 2.2 1.8 3.9 3.8 4.2v2.6c-1.3 0-2.6-.4-3.7-1v5.8c0 3.5-2.8 6.3-6.3 6.3S4 18.1 4 14.6s2.8-6.3 6.3-6.3c.3 0 .7 0 1 .1v2.7c-.3-.1-.6-.2-1-.2a3.6 3.6 0 103.6 3.6V3h2.6z"/></svg>';
+    if (n === "xhs" || n === "xiaohongshu" || n === "小红书" || n === "red") return '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm4.3 7.2c.2.3.2.6 0 .9l-1.6 2.6 1.6 2.6c.2.3.2.6 0 .9l-.9 1.5c-.2.3-.5.4-.8.3l-3.6-1.4-3.6 1.4c-.3.1-.6 0-.8-.3l-.9-1.5c-.2-.3-.2-.6 0-.9l1.6-2.6-1.6-2.6c-.2-.3-.2-.6 0-.9l.9-1.5c.2-.3.5-.4.8-.3l3.6 1.4 3.6-1.4c.3-.1.6 0 .8.3l.9 1.5z"/></svg>';
+    if (n === "weixin" || n === "wechat" || n === "微信") return '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8.5 4C4.9 4 2 6.5 2 9.5c0 1.7 1 3.2 2.5 4.2L4 16l2.6-1.3c.6.2 1.2.3 1.9.3h.6c-.1-.5-.1-1 0-1.5-.2 0-.4-.1-.6-.1-.3 0-.6 0-.9-.1L6 14l.4-.7c-1.2-.8-2-2-2-3.4 0-2.2 2.3-4 5.1-4 .3 0 .5 0 .8.1.3-1.1 1.1-2 2.1-2.5C11.4 4.5 10 4 8.5 4zM6.5 7c-.4 0-.8.3-.8.7s.3.7.8.7.8-.3.8-.7-.3-.7-.8-.7zm4 0c-.4 0-.8.3-.8.7s.3.7.8.7.8-.3.8-.7-.3-.7-.8-.7z"/><path d="M22 14.5c0-2.5-2.5-4.5-5.5-4.5S11 12 11 14.5s2.5 4.5 5.5 4.5c.6 0 1.1-.1 1.7-.2L20 20l-.4-1.6c1.4-.8 2.4-2.2 2.4-3.9zM15 13c-.3 0-.5.2-.5.5s.2.5.5.5.5-.2.5-.5-.2-.5-.5-.5zm3 0c-.3 0-.5.2-.5.5s.2.5.5.5.5-.2.5-.5-.2-.5-.5-.5z"/></svg>';
+    if (n === "weibo" || n === "微博") return '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M10.5 18.5c-4.1.5-7.7-1.3-8-4-.3-2.7 2.8-5.2 6.9-5.7 4.1-.5 7.7 1.3 8 4 .3 2.7-2.8 5.2-6.9 5.7zm-.7-2.2c-.1.3-.5.4-.7.2-.2-.1-.3-.3-.2-.5.1-.1.3-.2.4-.2.3 0 .5.3.5.5zm3.3-.2c-.3.4-.8.5-1.1.2-.3-.3-.4-.8-.1-1.1.3-.3.8-.5 1.1-.2.3.3.4.8.1 1.1zm.9-2.3c-.1 0-.2.1-.2.2.1.2.3.3.5.2.1-.1.1-.3 0-.4-.1 0-.2-.1-.3-.1z"/></svg>';
     if (n === "email") return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7l9 6 9-6M4 5h16a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V6a1 1 0 011-1z"/></svg>';
     if (n === "location") return '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c2.7 0 5 2.2 5 5 0 3.5-3.2 7.5-5 9-1.8-1.5-5-5.5-5-9 0-2.8 2.3-5 5-5zm0 3a2 2 0 100 4 2 2 0 000-4z"/></svg>';
     if (n === "clock") return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 7v5l3 2"/></svg>';
