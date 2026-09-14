@@ -394,10 +394,10 @@ window.App = (function () {
 
   /* ---------- 元信息 ---------- */
   function renderMeta(meta, hero) {
-    const siteName = (meta && meta.site_name) || "Magician-阿祥";
+    const siteName = (meta && meta.site_name) || "Magician-阿祥•Studio";
     document.getElementById("navLogo").textContent = (meta && meta.logo_char) || siteName.charAt(0);
     document.getElementById("footerLogo").textContent = (meta && meta.logo_char) || siteName.charAt(0);
-    const nameHtml = `${esc(siteName)}<span class="text-gold-400">.</span>`;
+    const nameHtml = esc(siteName);
     const navName = document.getElementById("navName");
     if (navName) navName.innerHTML = nameHtml;
     if (meta && meta.footer_text) document.getElementById("footerText").textContent = meta.footer_text;
