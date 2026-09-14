@@ -39,10 +39,10 @@ export const initialSettings = {
     location: "上海 · 全球远程",
     response_time: "工作日 24h 内",
     socials: [
-      { name: "YouTube", url: "https://youtube.com" },
+      { name: "抖音", url: "https://www.douyin.com" },
+      { name: "小红书", url: "https://www.xiaohongshu.com" },
       { name: "Bilibili", url: "https://bilibili.com" },
-      { name: "Instagram", url: "https://instagram.com" },
-      { name: "Email", url: "mailto:hello@linmo.studio" },
+      { name: "YouTube", url: "https://youtube.com" },
     ],
   },
   skills: [
